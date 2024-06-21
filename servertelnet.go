@@ -72,12 +72,12 @@ func authenticate(w telnet.Writer, r telnet.Reader) bool {
 // showMenu function to display the menu and handle user input
 func showMenu(w telnet.Writer, r telnet.Reader) {
 	for {
-		w.Write([]byte("\nMenu:"))
-		w.Write([]byte("\n1. List Presets"))
-		w.Write([]byte("\n2. Run Presets"))
-		w.Write([]byte("\n3. Add Presets"))
-		w.Write([]byte("\n4. Exit"))
-		w.Write([]byte("\nEnter your choice: "))
+		w.Write([]byte("\r\nMenu:\r\n"))
+		w.Write([]byte("1. List Presets\r\n"))
+		w.Write([]byte("2. Run Presets\r\n"))
+		w.Write([]byte("3. Add Presets\r\n"))
+		w.Write([]byte("4. Exit\r\n"))
+		w.Write([]byte("Enter your choice: "))
 
 		choice, err := readLine(r)
 		if err != nil {
@@ -94,10 +94,10 @@ func showMenu(w telnet.Writer, r telnet.Reader) {
 		case "3":
 			addPreset(w, r)
 		case "4":
-			w.Write([]byte("Goodbye!\n"))
+			w.Write([]byte("Goodbye!\r\n"))
 			return
 		default:
-			w.Write([]byte("Invalid choice, please try again.\n"))
+			w.Write([]byte("Invalid choice, please try again.\r\n"))
 		}
 	}
 }
@@ -106,9 +106,9 @@ func showMenu(w telnet.Writer, r telnet.Reader) {
 func listPresets(w telnet.Writer) {
 	//presetsMutex.Lock()
 	//defer presetsMutex.Unlock()
-	w.Write([]byte("\nList of Presets:\n"))
+	w.Write([]byte("\nList of Presets:\r\n"))
 	for i, preset := range presets {
-		w.Write([]byte(fmt.Sprintf("%d.  %s  %s\n", i+1, preset.PresetId, preset.Pname)))
+		w.Write([]byte(fmt.Sprintf("%d.  %s  %s\r\n", i+1, preset.PresetId, preset.Pname)))
 	}
 }
 
@@ -117,7 +117,7 @@ func runPreset(w telnet.Writer, r telnet.Reader) {
 	id, err := readLine(r)
 	if err != nil {
 		fmt.Println("Error reading preset id:", err)
-		w.Write([]byte("Failed to run preset.\n"))
+		w.Write([]byte("Failed to run preset.\r\n"))
 		return
 	}
 	id = strings.TrimSpace(id)
@@ -139,14 +139,14 @@ func addPreset(w telnet.Writer, r telnet.Reader) {
 	name, err := readLine(r)
 	if err != nil {
 		fmt.Println("Error reading preset name:", err)
-		w.Write([]byte("Failed to add preset.\n"))
+		w.Write([]byte("Failed to add preset.\r\n"))
 		return
 	}
 	name = strings.TrimSpace(name)
 	//presetsMutex.Lock()
 	presets = append(presets, preset{PresetId: id, Pname: name})
 	//presetsMutex.Unlock()
-	w.Write([]byte("Preset added successfully!\n"))
+	w.Write([]byte("Preset added successfully!\r\n"))
 }
 
 // readLine function to read a line of input from the Telnet client
